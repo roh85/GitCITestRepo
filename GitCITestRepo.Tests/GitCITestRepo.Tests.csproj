@@ -66,6 +66,10 @@
       <Project>{A45F9C40-2413-4D60-92BA-7B375E06A679}</Project>
       <Name>GitCITestRepo</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GitTestRepo.Db\GitTestRepo.Db.csproj">
+      <Project>{6654AB35-2CAE-4904-B519-9647FBE84E85}</Project>
+      <Name>GitTestRepo.Db</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
@@ -87,6 +91,10 @@
   </Choose>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

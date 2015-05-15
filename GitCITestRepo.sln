@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitCITestRepo", "GitCITestR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitCITestRepo.Tests", "GitCITestRepo.Tests\GitCITestRepo.Tests.csproj", "{00955D2F-45CC-4941-8F7E-19BC33814C54}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitTestRepo.Db", "GitTestRepo.Db\GitTestRepo.Db.csproj", "{6654AB35-2CAE-4904-B519-9647FBE84E85}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{00955D2F-45CC-4941-8F7E-19BC33814C54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00955D2F-45CC-4941-8F7E-19BC33814C54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00955D2F-45CC-4941-8F7E-19BC33814C54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6654AB35-2CAE-4904-B519-9647FBE84E85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6654AB35-2CAE-4904-B519-9647FBE84E85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6654AB35-2CAE-4904-B519-9647FBE84E85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6654AB35-2CAE-4904-B519-9647FBE84E85}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
