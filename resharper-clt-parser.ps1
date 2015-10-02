@@ -10,11 +10,11 @@ $file = $args[0];
 $xml = [xml](get-content $file)
 $îssueTypes = $xml.SelectNodes("/Report/IssueTypes/IssueType")
 $issues = $xml.SelectNodes("/Report/Issues/Project/Issue")
-$merged = @()
+$messages = @()
 
 foreach($i in $issues){
 	$issueType = $îssueTypes | ? { $_.Id -eq $i.TypeId }
-	$merged += New-Object PSObject -Property @{
+	$messages += New-Object PSObject -Property @{
 		File = $i.File
 		Message = $i.Message
 		Severity = $issueType.Severity
@@ -22,7 +22,9 @@ foreach($i in $issues){
 	}
 }
 
-foreach($el in $merged){
-		Write-Host $el
-		Add-AppveyorMessage -Message $el.Message -Category $el.Severity -Details "$el.File $el.Line"
+foreach($msg in $messages){
+		Write-Host $msg
+		if($msg.Severity -eq "SUGGESTION" -or $msg.Severity -eq "HINT") { Add-AppveyorMessage -Message $msg.Message -Category "Information" -Details "$msg.File $msg.Line" }
+		elseif($msg.Severity -eq "WARNING") { Add-AppveyorMessage -Message $msg.Message -Category "Warning" -Details "$msg.File $msg.Line" }
+		elseif($msg.Severity -eq "ERROR") { Add-AppveyorMessage -Message $msg.Message -Category "Error" -Details "$msg.File $msg.Line" }		
 }
