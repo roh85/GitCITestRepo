@@ -24,7 +24,9 @@ foreach($i in $issues){
 
 foreach($msg in $messages){
 		Write-Host $msg
-		if($msg.Severity -eq "SUGGESTION" -or $msg.Severity -eq "HINT") { Add-AppveyorMessage -Message $msg.Message -Category "Information" -Details "$msg.File $msg.Line" }
-		elseif($msg.Severity -eq "WARNING") { Add-AppveyorMessage -Message $msg.Message -Category "Warning" -Details "$msg.File $msg.Line" }
-		elseif($msg.Severity -eq "ERROR") { Add-AppveyorMessage -Message $msg.Message -Category "Error" -Details "$msg.File $msg.Line" }		
+		$msgfmt = $msg.Message + " in " + $msg.File + " line: " + $msg.Line
+
+		if($msg.Severity -eq "SUGGESTION" -or $msg.Severity -eq "HINT") { Add-AppveyorMessage -Message $msgfmt -Category "Information" -Details $msgfmt }
+		elseif($msg.Severity -eq "WARNING") { Add-AppveyorMessage -Message $msgfmt -Category "Warning" -Details $msgfmt }
+		elseif($msg.Severity -eq "ERROR") { Add-AppveyorMessage -Message $msgfmt -Category "Error" -Details $msgfmt }		
 }
