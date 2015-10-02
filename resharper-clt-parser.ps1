@@ -24,5 +24,5 @@ foreach($i in $issues){
 
 foreach($el in $merged){
 		Write-Host $el
-		Add-AppveyorMessage -Message $el.Message -Category $el.Severity -Details "{2} {3}" -f $el.File, $el.Line
+		Add-AppveyorMessage -Message $el.Message -Category $el.Severity -Details [string]::format("{2} {3}", $el.File, $el.Line)
 }
