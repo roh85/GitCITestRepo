@@ -6,6 +6,7 @@
 #
 #  build_artifacts_dir 		- This folder is created if it is missing and contains output of the build
 #  configuration			- The configuration used to build eg. Debug, Release
+#  solution					- Name of the solution file
 #
 
 Properties {
@@ -26,8 +27,7 @@ task TestProperties {
 
 Task Build -Depends Clean {
 	Write-Host "Building GitCITestRepo.sln" -ForegroundColor Green
-	Exec { msbuild $solution /p:OutDir=$build_artifacts_dir /t:Rebuild  /p:Configuration=Release /p:Platform="Any CPU" /v:q }
-	#Exec { &("C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe") $solution /p:Platform="Any CPU" /v:q }   
+	Exec { msbuild $solution /p:OutDir=$build_artifacts_dir /t:Rebuild  /p:Configuration=Release /p:Platform="Any CPU" /v:q }  
 }	
 
 Task Clean {
