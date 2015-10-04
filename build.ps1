@@ -33,7 +33,7 @@ Task Build -Depends Clean {
 Task Clean {
 	Write-Host "Cleaning GitCITestRepo.sln" -ForegroundColor Green
 	
-	Exec { msbuild $solution /p:OutDir=$build_artifacts_dir /t:Clean  /p:Configuration=Release /p:Platform="Any CPU" /v:q }
+	Exec { msbuild $solution /p:OutDir=$build_artifacts_dir /t:Clean  /p:Configuration=$configuration /p:Platform="Any CPU" /v:q }
 
 	# Define files and directories to delete
 	$include = @("*.suo","*.user","*.cache","*.docstates","bin","obj","build")
