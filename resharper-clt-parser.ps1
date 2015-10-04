@@ -23,10 +23,13 @@ foreach($i in $issues){
 }
 
 foreach($msg in $messages){
-		Write-Host $msg
 		$msgfmt = $msg.Message + " in " + $msg.File + " line: " + $msg.Line
-
-		if($msg.Severity -eq "SUGGESTION" -or $msg.Severity -eq "HINT") { Add-AppveyorMessage -Message $msgfmt -Category "Information" -Details $msgfmt }
-		elseif($msg.Severity -eq "WARNING") { Add-AppveyorMessage -Message $msgfmt -Category "Warning" -Details $msgfmt }
-		elseif($msg.Severity -eq "ERROR") { Add-AppveyorMessage -Message $msgfmt -Category "Error" -Details $msgfmt }		
+		
+		if($env:APPVEYOR){
+			if($msg.Severity -eq "SUGGESTION" -or $msg.Severity -eq "HINT") { Add-AppveyorMessage -Message $msgfmt -Category "Information" -Details $msgfmt }
+			elseif($msg.Severity -eq "WARNING") { Add-AppveyorMessage -Message $msgfmt -Category "Warning" -Details $msgfmt }
+			elseif($msg.Severity -eq "ERROR") { Add-AppveyorMessage -Message $msgfmt -Category "Error" -Details $msgfmt }			
+		}else{
+			Write-Host $msgfmt
+		}
 }
