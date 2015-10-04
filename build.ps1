@@ -36,7 +36,7 @@ Task Clean {
 	Exec { msbuild $solution /p:OutDir=$build_artifacts_dir /t:Clean  /p:Configuration=$configuration /p:Platform="Any CPU" /v:q }
 
 	# Define files and directories to delete
-	$include = @("*.suo","*.user","*.cache","*.docstates","bin","obj","build")
+	$include = @("*.suo","*.user","*.cache","*.docstates","bin","obj","build", ".build")
 
 	# Define files and directories to exclude
 	$exclude = @()
