@@ -1,7 +1,11 @@
-$TOOLS_DIR = Join-Path $PSScriptRoot "tools"
+Write-Host "*******************************************************************";
+Write-Host "***********             Pre-build script           ****************";
+Write-Host "*******************************************************************";
+
+$NUGET_DIR = Join-Path $PSScriptRoot ".nuget"
 
 $NUGET_URL = "https://nuget.org/nuget.exe"
-$NUGET_EXE = Join-Path $TOOLS_DIR "nuget.exe"
+$NUGET_EXE = Join-Path $NUGET_DIR "nuget.exe"
 
 $CHOCOLATEY_URL = "https://chocolatey.org/install.ps1"
 $CHOCOLATEY_EXE = "choco"
@@ -20,12 +24,12 @@ if (!(Test-Path $NUGET_EXE)) {
 	Write-Host "Installing nuget package manager" -ForegroundColor Green
 
 	Write-Host "Creating Tools directory" -ForegroundColor Green
-	if (Test-Path $TOOLS_DIR)
+	if (Test-Path $NUGET_DIR)
 	{
-		rd $TOOLS_DIR -rec -force | out-null
+		rd $NUGET_DIR -rec -force | out-null
 	}
 
-	mkdir $TOOLS_DIR | out-null
+	mkdir $NUGET_DIR | out-null
 
 	Invoke-WebRequest $NUGET_URL -OutFile $NUGET_EXE
 	Set-Alias nuget $NUGET_EXE -Scope Global -Verbose
@@ -33,9 +37,14 @@ if (!(Test-Path $NUGET_EXE)) {
 
 # Make sure NuGet exists where we expect it.
 if (!(Test-Path $NUGET_EXE)) {
-    Throw "Could not find NuGet.exe"
+    Throw "Could not find nuget.exe"
 }
 
 # Restore tools from NuGet?
 Write-Host "Restoring nuget packages" -ForegroundColor Green
 Invoke-Expression "$NUGET_EXE restore"
+
+# Install needed choco packages
+Write-Host "Installing choco packages" -ForegroundColor Green
+Invoke-Expression "choco install psake -y"
+Invoke-Expression "choco install resharper-clt -Pre -y"
