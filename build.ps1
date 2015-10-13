@@ -1,73 +1,23 @@
-# This build assumes you have psake installed: https://github.com/psake/psake/
-# You can install this on your Windows machine by using chocolatey: https://chocolatey.org/
-#			"choco install psake"
-#
-# For easy use we will use parameter overrides when invoking psake to not overly complicate the build file
-#
-#  build_artifacts_dir 		- This folder is created if it is missing and contains output of the build
-#  configuration			- The configuration used to build eg. Debug, Release
-#  solution					- Name of the solution file
-#
+$PREBUILD_SCRIPT = Join-Path $PSScriptRoot "prebuild.ps1"
+$BUILD_SCRIPT = Join-Path $PSScriptRoot "default.ps1"
 
-Properties {
-	$build_artifacts_dir = $null
-	$configuration = $null
-	$solution = $null
-}
+$SOLUTION_FILE = Join-Path $PSScriptRoot "GitCITestRepo.sln"
 
-FormatTaskName (("-"*25) + "[{0}]" + ("-"*25))
+# Debug, Release
+$BUILD_CONFIGURATION = "Release"
 
-Task Default -depends TestProperties, Build, InspectCode
+# Output directory that will contain all compiled binaries
+$ARTIFACTS_DIR = Join-Path -Path $PSScriptRoot -ChildPath ".build"
 
-task TestProperties { 
-	Assert ($build_artifacts_dir -ne $null) "build_artifacts_dir should not be null"
-	Assert ($configuration -ne $null) "configuration should not be null"
-	Assert ($solution -ne $null) "solution should not be null"
-}
+# Execute prebuild script to install all prerequisites
+Invoke-Expression $PREBUILD_SCRIPT
 
-Task Build -Depends Clean {
-	Write-Host "Building GitCITestRepo.sln" -ForegroundColor Green
-	Exec { msbuild $solution /p:OutDir=$build_artifacts_dir /t:Rebuild  /p:Configuration=Release /p:Platform="Any CPU" /v:q }  
-}	
+# Build script uses PSake so import the PSake module
+Import-Module $env:ChocolateyInstall\lib\psake\tools\psake.psm1
 
-Task Clean {
-	Write-Host "Cleaning GitCITestRepo.sln" -ForegroundColor Green
-	
-	Exec { msbuild $solution /p:OutDir=$build_artifacts_dir /t:Clean  /p:Configuration=$configuration /p:Platform="Any CPU" /v:q }
-
-	# Define files and directories to delete
-	$include = @("*.suo","*.user","*.cache","*.docstates","bin","obj","build", ".build")
-
-	# Define files and directories to exclude
-	$exclude = @()
-
-	$items = Get-ChildItem $path -recurse -force -include $include -exclude $exclude
-
-	if ($items) {
-		foreach ($item in $items) {
-			Remove-Item $item.FullName -Force -Recurse -ErrorAction SilentlyContinue
-			Write-Host "Deleted" $item.FullName
-		}
-	}
-
-	Write-Host "Creating BuildArtifacts directory" -ForegroundColor Green
-	if (Test-Path $build_artifacts_dir)
-	{
-		rd $build_artifacts_dir -rec -force | out-null
-	}
-
-	mkdir $build_artifacts_dir | out-null
-}
-
-Task InspectCode -Depends Build {
-	Write-Host "Running InspectCode" -ForegroundColor Green
-	inspectcode /o="inspectcodereport.xml" $solution
-	
-Task InspectCodeParser -Depends InspectCode	
-	Write-Host "Parsing InspectCode output" -ForegroundColor Green
-	.\resharper-clt-parser.ps1 "inspectcodereport.xml"	
-}
-
-Task Test -PreCondition { return Test-CommandExists("xunit") } {
-   # Exec { xunit ".\build\*.Tests.dll" } TODO
+# Execute PSake build tasks
+Invoke-Psake $BUILD_SCRIPT -properties @{
+	"build_artifacts_dir"=$ARTIFACTS_DIR; 
+	"configuration"=$BUILD_CONFIGURATION;
+	"solution"="$SOLUTION_FILE"
 }

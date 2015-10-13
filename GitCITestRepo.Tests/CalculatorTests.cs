@@ -1,22 +1,16 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using GitCITestRepo.Program;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
+using NUnit.Framework;
 
 namespace GitCITestRepo.Program.Tests
 {
-    [TestClass()]
+    [TestFixture]
     public class CalculatorTests
     {
-        [TestMethod()]
-        public void MultiplyTest()
-        {
-            var mock = new Mock<ICalculator>();
-            mock.Setup(calculator => calculator.Multiply(2, 3)).Returns(6);
+        [TestCase(2, 3, Result = 6)]
+        public int MultiplyTestSucces(int x, int y)
+        {          
+            ICalculator c = new Calculator();
+            return c.Multiply(x, y);
         }
     }
 }
