@@ -1,6 +1,3 @@
-Write-Host "*******************************************************************";
-Write-Host "***********             Resharper-CLT parser      ****************";
-Write-Host "*******************************************************************";
 if($args.Length -lt 1) {
     Write-Host "Not enough arguments passed, skipping script";
     return;
