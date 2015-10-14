@@ -1,10 +1,29 @@
+if($args.Length -lt 1) {
+    Write-Host "Configuration paramater should be set. Aborting script";
+    return;
+}
+
+$CONFIGURATION = $args[0];
+
 $NUNIT_EXE = Get-ChildItem "packages\NUnit.Runners.**\tools\nunit-console.exe"
+
+$SEARCH_PATTERN = $NULL
+$TESTS_ASSEMBLIES = $NULL
 
 if(!(Test-Path $NUNIT_EXE)){
 	throw("nunit-console.exe not found. Aborting tests")
 }
 
-$TESTS_ASSEMBLIES = Get-ChildItem ".build\**.Tests.dll"
+If(Test-Path ".build"){
+    $SEARCH_PATTERN = ".build\**.Tests.dll"
+}
+else{
+    $SEARCH_PATTERN = "*.Tests\bin\$CONFIGURATION\*.Tests.dll"
+}
+
+if(!($SEARCH_PATTERN -eq $NULL)){
+    $TESTS_ASSEMBLIES = Get-ChildItem $SEARCH_PATTERN
+}
 
 if($TESTS_ASSEMBLIES -ne $NULL){
     ForEach($TEST in $TESTS_ASSEMBLIES){
