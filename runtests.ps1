@@ -21,7 +21,7 @@ else{
     $SEARCH_PATTERN = "*.Tests\bin\$CONFIGURATION\*.Tests.dll"
 }
 
-if(!($SEARCH_PATTERN -eq $NULL)){
+if($SEARCH_PATTERN -ne $NULL){
     $TESTS_ASSEMBLIES = Get-ChildItem $SEARCH_PATTERN
 }
 
