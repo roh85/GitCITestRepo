@@ -17,7 +17,7 @@ Properties {
 
 FormatTaskName (("-"*25) + "[{0}]" + ("-"*25))
 
-Task Default -depends TestProperties, Build, InspectCode
+Task Default -depends TestProperties, Build, InspectCode, Test
 
 task TestProperties { 
 	Assert ($build_artifacts_dir -ne $null) "build_artifacts_dir should not be null"
@@ -36,7 +36,7 @@ Task Clean {
 	Exec { msbuild $solution /p:OutDir=$build_artifacts_dir /t:Clean  /p:Configuration=$configuration /p:Platform="Any CPU" /v:q }
 
 	# Define files and directories to delete
-	$include = @("*.suo","*.user","*.cache","*.docstates","bin","obj","build", ".build")
+	$include = @("*.suo","*.user","*.cache","*.docstates","bin","obj","build", ".build", "testresults.xml", "inspectcodereport.xml")
 
 	# Define files and directories to exclude
 	$exclude = @()
@@ -65,9 +65,13 @@ Task InspectCode -Depends Build {
 	
 Task InspectCodeParser -Depends InspectCode	
 	Write-Host "Parsing InspectCode output" -ForegroundColor Green
-	.\resharper-clt-parser.ps1 "inspectcodereport.xml"	
+	$PARSER = Join-Path $PSScriptRoot "resharper-clt-parser.ps1"
+	Invoke-Expression "$PARSER inspectcodereport.xml"
+	
 }
 
-Task Test -PreCondition { return Test-CommandExists("xunit") } {
-   # Exec { xunit ".\build\*.Tests.dll" } TODO
+Task Test -Depends Build {
+	Write-Host "Running NUnit tests" -ForegroundColor Green
+	$TEST_RUNNER = Join-Path $PSScriptRoot "runtests.ps1"
+	Invoke-Expression $TEST_RUNNER
 }

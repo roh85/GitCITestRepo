@@ -10,8 +10,6 @@ $NUGET_EXE = Join-Path $NUGET_DIR "nuget.exe"
 $CHOCOLATEY_URL = "https://chocolatey.org/install.ps1"
 $CHOCOLATEY_EXE = "choco"
 
-
-
 # Install Chocolatey package manager
 if(!(Get-Command "choco" -errorAction SilentlyContinue)) {
 	Write-Host "Installing Chocolatey package manager" -ForegroundColor Green
@@ -46,5 +44,5 @@ Invoke-Expression "$NUGET_EXE restore"
 
 # Install needed choco packages
 Write-Host "Installing choco packages" -ForegroundColor Green
-Invoke-Expression "choco install psake -y"
-Invoke-Expression "choco install resharper-clt -Pre -y"
+if(!(Get-Command "psake")){ Invoke-Expression "choco install psake -y" }
+if(!(Get-Command "inspectcode")) { Invoke-Expression "choco install resharper-clt -Pre -y" }
