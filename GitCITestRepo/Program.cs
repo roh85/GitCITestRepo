@@ -1,4 +1,5 @@
 ﻿using Microsoft.Practices.ServiceLocation;
+using Microsoft.Practices.Unity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace GitCITestRepo
     {
         static void Main(string[] args)
         {
-            MyServiceLocator myservicelocator = new MyServiceLocator();
+            ContainerBootstrapper.Initialise();
             MainAsync(args).Wait();
         }
 
