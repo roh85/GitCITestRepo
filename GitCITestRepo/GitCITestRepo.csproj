@@ -59,7 +59,7 @@
   <ItemGroup>
     <Compile Include="Calculator.cs" />
     <Compile Include="ICalculator.cs" />
-    <Compile Include="MyServiceLocator.cs" />
+    <Compile Include="ContainerBootstrapper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

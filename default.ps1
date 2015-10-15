@@ -72,6 +72,6 @@ Task InspectCodeParser -Depends InspectCode
 
 Task Test -Depends Build {
 	Write-Host "Running NUnit tests" -ForegroundColor Green
-	$TEST_RUNNER = Join-Path $PSScriptRoot "runtests.ps1"
+	$TEST_RUNNER = Join-Path $PSScriptRoot "runtests.ps1 $configuration"
 	Invoke-Expression $TEST_RUNNER
 }
