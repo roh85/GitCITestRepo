@@ -1,7 +1,8 @@
 $PREBUILD_SCRIPT = Join-Path $PSScriptRoot "prebuild.ps1"
 $BUILD_SCRIPT = Join-Path $PSScriptRoot "default.ps1"
 
-$SOLUTION_FILE = Join-Path $PSScriptRoot "GitCITestRepo.sln"
+$SOLUTION_FILE = (Get-ChildItem $PSScriptRoot -Filter "*.sln").Name
+$SOLUTION_PATH = Join-Path $PSScriptRoot SOLUTION_FILE
 
 # Debug, Release
 $BUILD_CONFIGURATION = "Release"
