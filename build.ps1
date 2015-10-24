@@ -1,7 +1,7 @@
 $PREBUILD_SCRIPT = Join-Path $PSScriptRoot "prebuild.ps1"
 $BUILD_SCRIPT = Join-Path $PSScriptRoot "default.ps1"
-
 $SOLUTION_FILE = (Get-ChildItem $PSScriptRoot -Filter "*.sln").Name
+$PROJECT = [io.path]::GetFileNameWithoutExtension($SOLUTION_FILE)
 $SOLUTION_PATH = Join-Path $PSScriptRoot $SOLUTION_FILE
 
 # Debug, Release
@@ -20,5 +20,6 @@ Import-Module $env:ChocolateyInstall\lib\psake\tools\psake.psm1
 Invoke-Psake $BUILD_SCRIPT -properties @{
 	"build_artifacts_dir"=$ARTIFACTS_DIR; 
 	"configuration"=$BUILD_CONFIGURATION;
-	"solution"="$SOLUTION_FILE"
+	"solution"="$SOLUTION_FILE";
+	"project"="$PROJECT"
 }

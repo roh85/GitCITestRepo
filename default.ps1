@@ -13,27 +13,29 @@ Properties {
 	$build_artifacts_dir = $null
 	$configuration = $null
 	$solution = $null
+	$project = $null
 }
 
 FormatTaskName (("-"*25) + "[{0}]" + ("-"*25))
 
-Task Default -depends TestProperties, Build, InspectCode, Test
+Task Default -depends TestProperties, Build, InspectCode, Test, Pack
 
 task TestProperties { 
 	Assert ($build_artifacts_dir -ne $null) "build_artifacts_dir should not be null"
 	Assert ($configuration -ne $null) "configuration should not be null"
 	Assert ($solution -ne $null) "solution should not be null"
+	Assert ($project -ne $null) "project should not be null"
 }
 
 Task Build -Depends Clean {
 	Write-Host "Building GitCITestRepo.sln" -ForegroundColor Green
-	Exec { msbuild $solution /p:OutDir=$build_artifacts_dir /t:Rebuild  /p:Configuration=Release /p:Platform="Any CPU" /v:q }  
+	Exec { msbuild $solution /t:Rebuild  /p:Configuration=Release /p:Platform="Any CPU" /v:q }  
 }	
 
 Task Clean {
 	Write-Host "Cleaning GitCITestRepo.sln" -ForegroundColor Green
 	
-	Exec { msbuild $solution /p:OutDir=$build_artifacts_dir /t:Clean  /p:Configuration=$configuration /p:Platform="Any CPU" /v:q }
+	Exec { msbuild $solution /t:Clean  /p:Configuration=$configuration /p:Platform="Any CPU" /v:q }
 
 	# Define files and directories to delete
 	$include = @("*.suo","*.user","*.cache","*.docstates","bin","obj","build", ".build", "testresults.xml", "inspectcodereport.xml")
@@ -49,14 +51,6 @@ Task Clean {
 			Write-Host "Deleted" $item.FullName
 		}
 	}
-
-	Write-Host "Creating BuildArtifacts directory" -ForegroundColor Green
-	if (Test-Path $build_artifacts_dir)
-	{
-		rd $build_artifacts_dir -rec -force | out-null
-	}
-
-	mkdir $build_artifacts_dir | out-null
 }
 
 Task InspectCode -Depends Build {
@@ -74,4 +68,9 @@ Task Test -Depends Build {
 	Write-Host "Running NUnit tests" -ForegroundColor Green
 	$TEST_RUNNER = Join-Path $PSScriptRoot "runtests.ps1 $configuration"
 	Invoke-Expression $TEST_RUNNER
+}
+
+Task Pack -Depends Build {
+	Write-Host "Pack solution" -ForegroundColor Green
+	Compress-Archive .\$project\bin\$configuration\*.* -Update -DestinationPath "$project.zip"
 }
