@@ -46,3 +46,4 @@ Invoke-Expression "$NUGET_EXE restore"
 Write-Host "Installing choco packages" -ForegroundColor Green
 if(!(Get-Command "psake")){ Invoke-Expression "choco install psake -y" }
 if(!(Get-Command "inspectcode")) { Invoke-Expression "choco install resharper-clt -Pre -y" }
+if(!(Get-Command "7z")) { Invoke-Expression "choco install 7zip.commandline -y" }

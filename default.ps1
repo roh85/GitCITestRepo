@@ -72,5 +72,5 @@ Task Test -Depends Build {
 
 Task Pack -Depends Build {
 	Write-Host "Pack solution" -ForegroundColor Green
-	Compress-Archive .\$project\bin\$configuration\*.* -Update -DestinationPath "$project.zip"
+	7z a "$project.zip" .\$project\bin\$configuration\*.*
 }
