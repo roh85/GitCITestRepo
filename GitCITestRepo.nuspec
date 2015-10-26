@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Package</id>
+    <version>1.0.0</version>
+    <authors>Dynalean BV</authors>
+    <owners>Dynalean BV</owners>
+    <projectUrl>https://github.com/roh85/GitCITestRepo</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This is a test</description>
+    <copyright>Copyright Dynalean BV 2015</copyright>
+    <dependencies />
+  </metadata>
+</package>
