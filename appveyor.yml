@@ -22,8 +22,8 @@ after_build:
   - inspectcode /o="inspectcodereport.xml" /project="GitCITestRepo" "GitCITestRepo.sln"
   - NVika parsereport "inspectcodereport.xml" --debug --includesource
 test_script:
-  - ps: OpenCover.Console.exe -register:user -target:nunit-console.exe "-targetargs:"".\GitCITestRepo.Tests\bin\$env:CONFIGURATION\GitCITestRepo.Tests.dll"" /noshadow" -filter:"+[GitCITestRepo*]*" -output:coverage.xml
-  - ps: coveralls.net --opencover coverage.xml --full-sources
+  - OpenCover.Console.exe -register:user -target:nunit-console.exe "-targetargs:"".\GitCITestRepo.Tests\bin\$(configuration)\GitCITestRepo.Tests.dll"" /noshadow" -filter:"+[GitCITestRepo*]*" -output:coverage.xml
+  - coveralls.net --opencover coverage.xml --full-sources
 artifacts:
 - path: inspectcodereport.xml
 - path: testresults.xml
