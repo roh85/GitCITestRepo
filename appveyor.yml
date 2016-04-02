@@ -3,6 +3,13 @@ os: Windows Server 2012 R2
 configuration: Release
 init:
   - git config --global core.autocrlf true
+  - ps: Get-ChildItem Env:
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'  
 environment:
   COVERALLS_REPO_TOKEN:
     secure: o8b2zjTYPnMUPBdCzXAvZZnAEkRvLdGE7MNTDOC5R/JURTxu/JcAprXPyOkOPtdx
@@ -15,6 +22,7 @@ nuget:
   project_feed: true
 before_build:
   - nuget restore
+  - GitVersion /output buildserver /UpdateAssemblyInfo true  
 build:
   project: GitCITestRepo.sln
   verbosity: minimal
