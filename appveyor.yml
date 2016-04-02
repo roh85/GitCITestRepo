@@ -13,9 +13,9 @@ environment:
   COVERALLS_REPO_TOKEN:
     secure: o8b2zjTYPnMUPBdCzXAvZZnAEkRvLdGE7MNTDOC5R/JURTxu/JcAprXPyOkOPtdx
 install:
-  - choco install resharper-clt -y
   - choco install opencover -source https://nuget.org/api/v2/
   - choco install coveralls.io -source https://nuget.org/api/v2/
+  - appveyor-retry choco install resharper-clt -y  
   - choco install nvika -y
 nuget:
   project_feed: true
